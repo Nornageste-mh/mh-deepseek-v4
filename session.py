@@ -41,6 +41,7 @@ from long_term_memory import LongTermMemory, set_current_identity
 from context_compressor import ContextCompressor, ContextManager, estimate_tokens_rough
 from model_provider import create_default_providers, ModelProviderManager, Provider
 from task_tracker import TaskTracker, TaskStatus
+from retry_utils import failure_tracker, is_network_ok
 
 from config import (
     DEFAULT_PROVIDER, DEFAULT_MODEL,
@@ -456,8 +457,7 @@ class MHSession:
         self._stop_requested = True
 
     def _save_memory_safe(self):
-        """安全保存 conversation_history —— """
-        """异常时静默失败，不中断主流程"""
+        """安全保存 conversation_history —— 异常时静默失败，不中断主流程"""
         if not self.conversation_history:
             return
         try:

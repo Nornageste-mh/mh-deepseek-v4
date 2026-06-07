@@ -190,10 +190,6 @@ class Provider:
             adapted.pop("reasoning_effort", None)
             adapted.pop("presence_penalty", None)
             adapted.pop("frequency_penalty", None)
-            # 移除 agent system prompt，使用妹居自己的
-            if "messages" in adapted:
-                adapted["messages"] = [m for m in adapted["messages"]
-                                       if m.get("role") != "system"]
             adapted["stream"] = False  # 妹居不支持流式
         else:
             # DeepSeek：正常格式

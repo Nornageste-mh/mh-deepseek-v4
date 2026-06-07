@@ -441,7 +441,8 @@
         updateIdentityUI();
 
         menuToggle.addEventListener('click',()=>sidebar.classList.toggle('open'));
-        document.addEventListener('click',(e)=>{if(!sidebar.contains(e.target)&&e.target!==menuToggle&&window.innerWidth<=768)sidebar.classList.remove('open');});
+        document.addEventListener('click',(e)=>{if(!sidebar.contains(e.target)&&e.target!==menuToggle&&window.innerWidth<=768)sidebar.classList.remove('open');
+            switchProviderModel();});
 
         let pressTimer;
         function setupLongPress(el){
@@ -986,7 +987,7 @@
                 });
                 sessionGroups.appendChild(gDiv);
             }
-            if (!sessions.length) await createNewSession();
+            if (!sessions.length && !window._isCreatingSession) await createNewSession();
             else if (!currentSessionId) await switchSession(sessions[0].id);
         }
 
@@ -1002,23 +1003,23 @@
             });
             return groups;
         }
-
         async function createNewSession() {
             if (isSending) return;
-            const res = await fetch('/api/sessions/new', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ identity: currentIdentity }) });
+            const res = await fetch('/api/sessions/new', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ identity: currentIdentity, provider_id: currentProvider, model_id: currentModel }) });
             const data = await res.json();
-            await switchSession(data.session_id);
-            loadSessions();
+            currentSessionId = data.session_id;
+            renderHistoryMessages([]);
+            await loadSessions();
+            switchProviderModel();
         }
-
         async function switchSession(sid) {
-            if (isSending) return;
             currentSessionId = sid;
             const res = await fetch(`/api/sessions/${sid}/history?identity=${currentIdentity}`);
             const history = await res.json();
             renderHistoryMessages(history);
             loadSessions();
             sidebar.classList.remove('open');
+            switchProviderModel();
         }
 
         function renderHistoryMessages(history) {

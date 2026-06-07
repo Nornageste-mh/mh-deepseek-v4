@@ -1,55 +1,51 @@
-# MH-DeepSeek Agent（临时过渡版）
+# MH-DeepSeek V4
 
-> ⚠️ **这是一个过渡版本，功能有限，仅供临时测试。强烈建议转向更成熟的开源方案。**
-
----
-
-## 🚦 为什么不该用这个项目？
-
-- 代码质量未经充分测试，长期记忆和会话管理存在已知稳定性问题
-- Android 控制模块依赖外部环境，成功率不高
-- 本项目仅为早期个人学习实验，未来可能归档或停止维护
+一个基于 DeepSeek V4 API 的轻量级 Web 智能体，支持 Android Termux / Linux / Windows。
 
 ---
 
-## ✅ 推荐替代项目
+## 功能
 
-以下三个开源项目成熟度更高、社区活跃、文档完善，**强烈建议直接使用**：
+- 多模型支持（DeepSeek V4 Flash / Pro / 妹居DeepSeek）
+- 工具调用（终端命令 / 文件操作 / 网页搜索 / 网页浏览 / 网络安全检测）
+- 思考模式（推理链可视化）
+- 流式响应 + 自动错误恢复（HTTP 400/429/5xx）
+- 长期记忆（跨会话用户偏好）
+- 上下文压缩（LLM 摘要 + 工具输出修剪）
+- 密钥分片加密存储（Shamir 秘密共享 + AES-256-GCM）
 
-### 1️⃣ DeepSeek-TUI
-
-终端原生编程智能体，基于 DeepSeek-V4 构建，由美国独立开发者 Hunter Bown 于 2026 年 1 月发布[reference:0]。
-
-- **核心定位**：终端里的 DeepSeek 版 Claude Code，用 Rust 编写，支持 100 万 Token 超长上下文[reference:1][reference:2]
-- **三大运行模式**：自动模式在每一轮交互中自动适配大模型并匹配推理等级[reference:3]
-- **安装运行**：一行命令或下载对应平台的预编译二进制即可启动[reference:4]
-- **项目地址**：https://github.com/??? （待补充）
-
-### 2️⃣ Hermes Agent
-
-Nous Research 旗下自主 AI Agent 应用层，2026 年 4 月 GitHub Stars 超过 52,800[reference:5]。
-
-- **核心定位**：一行命令部署，内置自学习循环，可自主创建技能、优化行为[reference:6]
-- **支持平台**：Linux、macOS、WSL2、Termux，通过 Telegram/Discord/Slack 等 6 大平台统一接入[reference:7]
-- **核心差异**：部署方式为一行 curl 安装，支持 6 种执行后端，内置自我进化能力[reference:8]
-- **安装运行**：`curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash`[reference:9]
-- **项目地址**：https://github.com/NousResearch/hermes-agent
-
-### 3️⃣ OpenClaw
-
-自主开源 AI 助手，截至 2026 年 3 月 GitHub Stars 超过 347,000，成为 GitHub 历史上 Star 数最高的软件仓库[reference:10][reference:11]。
-
-- **核心定位**：运行在你机器上的 AI 助手，通过 WhatsApp、Telegram、Slack、Discord、iMessage 或 Signal 对话并执行真实任务——清理收件箱、发送邮件、管理日历、办理航班值机[reference:12][reference:13]
-- **独特能力**：MIT 协议开源，本地优先存储（记忆和数据存为 Markdown 文件），支持社区技能包扩展[reference:14][reference:15]
-- **安装运行**：`npm i -g openclaw && openclaw onboard`[reference:16]
-- **项目地址**：https://github.com/openclaw/openclaw
-
----
-
-## 临时测试：本项目快速尝试（不推荐）
+## 快速开始
 
 ```bash
-git clone https://github.com/yourusername/mh-deepseek-agent.git
-cd mh-deepseek-agent
+git clone https://github.com/Nornageste-mh/mh-deepseek-v4.git
+cd mh-deepseek-v4
 pip install -r requirements.txt
 python main.py
+```
+
+浏览器打开 `http://localhost:9090`。
+
+首次运行会引导配置 DeepSeek API Key 和博查搜索 Key。
+
+## 项目结构
+
+| 文件 | 说明 |
+|------|------|
+| `main.py` | 入口，自动初始化密钥 → 启动 Web |
+| `session.py` | 会话管理 + API 错误处理 + 流式循环 |
+| `model_provider.py` | DeepSeek / 妹居DeepSeek 提供商管理 |
+| `executor.py` | 安全命令执行器（root / Shizuku / ADB） |
+| `tool_registry.py` | MCP 兼容工具注册中心 |
+| `memory.py` | 会话记忆持久化 |
+| `long_term_memory.py` | 跨会话长期用户画像 |
+| `context_compressor.py` | 上下文压缩器（工具修剪 + LLM 摘要） |
+| `config.py` | 全局配置 |
+| `index.html` | 前端（纯 JS，零外部依赖） |
+
+## 平台说明
+
+Android Termux 环境下需额外配置 root 或 Shizuku 以获得完整终端能力。普通模式（非 root）下可正常使用大部分功能。
+
+## 许可
+
+MIT

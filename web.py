@@ -95,15 +95,18 @@ def list_sessions():
 
 @app.route('/api/sessions/new', methods=['POST'])
 def new_session():
-    identity = request.json.get('identity', 'agent')
+    identity = request.json.get("identity", "agent")
+    provider_id = request.json.get("provider_id", DEFAULT_PROVIDER)
+    model_id = request.json.get("model_id", DEFAULT_MODEL)
     new_id = str(uuid.uuid4())[:8]
     with SESSION_LOCK:
         api_keys = key_manager.get_api_keys()
         SESSIONS[new_id] = MHSession(new_id, api_key=api_keys.get("DEEPSEEK_API_KEY", ""),
                                       identity=identity,
+                                      provider_id=provider_id,
+                                      model_id=model_id,
                                       meiju_phone=api_keys.get("MEIJU_PHONE"),
                                       meiju_password=api_keys.get("MEIJU_PASSWORD"))
-    SESSIONS[new_id].memory.update_meta(new_id)
     return jsonify({"session_id": new_id, "title": "新对话"})
 
 
