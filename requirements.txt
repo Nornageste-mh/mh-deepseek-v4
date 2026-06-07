@@ -1,0 +1,21 @@
+# 核心依赖
+flask>=3.0.0
+requests>=2.31.0
+cryptography>=41.0.0
+
+# 网页抓取 — Scrapling（隐身模式反反爬 + 自适应选择器）
+scrapling>=0.2.0
+
+# 可选 — 网页浏览增强
+# beautifulsoup4>=4.12.0
+# lxml>=5.0.0
+# playwright>=1.40.0  # Scrapling JavaScript 渲染需要
+
+# 可选 — 系统监控
+# psutil>=5.9.0
+
+# 可选 — 图片处理
+# Pillow>=10.0.0
+
+# 可选 — 编码检测
+# chardet>=5.0.0

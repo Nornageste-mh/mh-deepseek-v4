@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 环境/密钥
+.env
+*.enc
+keys/
+agent_storage/keys/
+
+# 构建产物
+*.apk
+*.idsig
+build_work/
+dist/
+build/
+*.egg-info/
+
+# 运行时数据 - 大文件/目录不应进版本库
+agent_storage/tmp/
+agent_storage/python_bundle/
+agent_storage/apk_unpacked/
+agent_storage/original.apk
+apk_portable/build_work/
+*.log
+out/
+agent_memories/
+
+# 临时脚本
+git_push*.sh
+setup_git*.sh
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# 临时文件
+.gitkeep
