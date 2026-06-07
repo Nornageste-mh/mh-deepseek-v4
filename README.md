@@ -1,20 +1,12 @@
-# MH-DeepSeek V4
+# mh-deepseek-v4
 
-一个基于 DeepSeek V4 API 的轻量级 Web 智能体，支持 Android Termux / Linux / Windows。
+一个 DeepSeek V4 的 Web 客户端，运行在终端里。
+
+支持 Android Termux / Linux / Windows。
 
 ---
 
-## 功能
-
-- 多模型支持（DeepSeek V4 Flash / Pro / 妹居DeepSeek）
-- 工具调用（终端命令 / 文件操作 / 网页搜索 / 网页浏览 / 网络安全检测）
-- 思考模式（推理链可视化）
-- 流式响应 + 自动错误恢复（HTTP 400/429/5xx）
-- 长期记忆（跨会话用户偏好）
-- 上下文压缩（LLM 摘要 + 工具输出修剪）
-- 密钥分片加密存储（Shamir 秘密共享 + AES-256-GCM）
-
-## 快速开始
+## 安装
 
 ```bash
 git clone https://github.com/Nornageste-mh/mh-deepseek-v4.git
@@ -23,28 +15,39 @@ pip install -r requirements.txt
 python main.py
 ```
 
-浏览器打开 `http://localhost:9090`。
+浏览器打开 `http://localhost:9090`，按提示填入 API Key。
 
-首次运行会引导配置 DeepSeek API Key 和博查搜索 Key。
+Python 版本建议 3.10+。
 
-## 项目结构
+---
 
-| 文件 | 说明 |
-|------|------|
-| `main.py` | 入口，自动初始化密钥 → 启动 Web |
-| `session.py` | 会话管理 + API 错误处理 + 流式循环 |
-| `model_provider.py` | DeepSeek / 妹居DeepSeek 提供商管理 |
-| `executor.py` | 安全命令执行器（root / Shizuku / ADB） |
-| `tool_registry.py` | MCP 兼容工具注册中心 |
-| `memory.py` | 会话记忆持久化 |
-| `long_term_memory.py` | 跨会话长期用户画像 |
-| `context_compressor.py` | 上下文压缩器（工具修剪 + LLM 摘要） |
-| `config.py` | 全局配置 |
-| `index.html` | 前端（纯 JS，零外部依赖） |
+## 大致功能
 
-## 平台说明
+- 聊天界面（纯 JS 前端，不依赖任何框架）
+- 工具调用（终端、文件、搜索、网页抓取）
+- 流式输出，带思考过程展示
+- 错误自动重试
+- 会话记录持久化
 
-Android Termux 环境下需额外配置 root 或 Shizuku 以获得完整终端能力。普通模式（非 root）下可正常使用大部分功能。
+---
+
+## 依赖
+
+```
+flask, requests, cryptography, scrapling
+```
+
+完整列表见 `requirements.txt`。
+
+---
+
+## 已知局限
+
+- 没有完善的测试
+- 某些极端情况下消息格式可能出错（有自动修复，但不保证）
+- Android 上完整功能需要 root 或 Shizuku
+
+---
 
 ## 许可
 
