@@ -110,6 +110,9 @@ class KeyManager:
         if not self.config_file.exists():
             logger.warning("加密配置文件不存在，返回空字典")
             return {}
+        if self._master_key is None:
+            logger.error("主密钥不可用（分片损坏或解锁失败），无法解密配置")
+            return {}
         cipherdata = self.config_file.read_bytes()
         self._decrypted_config = decrypt_config(cipherdata, self._master_key)
         self._last_access = time.time()

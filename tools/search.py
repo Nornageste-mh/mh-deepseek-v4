@@ -4,7 +4,7 @@ import re
 import requests
 from html import unescape
 
-from config import BOCHA_SEARCH_API_KEY, BOCHA_SEARCH_URL, MAX_TOOL_OUTPUT_CHARS
+import config
 
 
 def register_tools(registry):
@@ -39,11 +39,11 @@ def _format_results(items: list, source_name: str, query: str) -> str:
 
 def _search_bocha(query: str, max_results: int = 5, freshness: str = "noLimit") -> list | None:
     """调用博查搜索标准版 API"""
-    if not BOCHA_SEARCH_API_KEY:
+    if not config.BOCHA_SEARCH_API_KEY:
         return None
     try:
         headers = {
-            "Authorization": f"Bearer {BOCHA_SEARCH_API_KEY}",
+            "Authorization": f"Bearer {config.BOCHA_SEARCH_API_KEY}",
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0"
         }
@@ -53,7 +53,7 @@ def _search_bocha(query: str, max_results: int = 5, freshness: str = "noLimit") 
             "summary": True,
             "count": min(max_results, 50)
         }
-        resp = requests.post(BOCHA_SEARCH_URL, json=payload, headers=headers, timeout=10)
+        resp = requests.post(config.BOCHA_SEARCH_URL, json=payload, headers=headers, timeout=10)
         if resp.status_code == 200:
             data = resp.json()
             if data.get("code") == 200:

@@ -115,9 +115,9 @@ class ToolRegistry:
             # 应用 output_mode
             text = str(result)
             if output_mode == "head" and len(text) > OUTPUT_HEAD_CHARS:
-                text = text[:OUTPUT_HEAD_CHARS] + f"\n... [截取前 {OUTPUT_HEAD_CHARS} 字符，完整输出共 {len(result)} 字符]"
+                text = text[:OUTPUT_HEAD_CHARS] + f"\n... [截取前 {OUTPUT_HEAD_CHARS} 字符，完整输出共 {len(text)} 字符]"
             elif output_mode == "tail" and len(text) > OUTPUT_TAIL_CHARS:
-                text = f"[输出共 {len(result)} 字符，显示后 {OUTPUT_TAIL_CHARS} 字符]\n..." + text[-OUTPUT_TAIL_CHARS:]
+                text = f"[输出共 {len(text)} 字符，显示后 {OUTPUT_TAIL_CHARS} 字符]\n..." + text[-OUTPUT_TAIL_CHARS:]
 
             return {
                 "content": [{"type": "text", "text": text}],

@@ -208,6 +208,15 @@ class ErrorRecoveryExecutor:
         self.consecutive_errors = 0
         self.max_consecutive_errors = 5
         self.last_recovery_action = None
+        # 上下文压缩器（供 truncate_context 恢复动作使用）
+        self.compressor = ContextCompressor(
+            model=MODEL_FAST,
+            context_length=128000,
+            threshold_percent=COMPRESSION_THRESHOLD_PERCENT,
+            protect_first_n=COMPRESSION_PROTECT_HEAD,
+            tail_token_budget=COMPRESSION_TAIL_TOKEN_BUDGET,
+            quiet=True,
+        )
     
     def execute_with_recovery(self, messages: List[Dict], payload: dict, headers: dict, url: str, think_mode: bool = False, max_retries: int = 3) -> Generator:
         retry_count = 0
@@ -665,8 +674,8 @@ class MHSession:
         if not provider.supports_thinking:
             think_mode = False
 
-        # 构建 payload
-        prepared_messages = self._prepare_messages_for_api(think_mode)
+        # 构建 payload（尊重调用方传入的 messages，支持 override 机制）
+        prepared_messages = messages if messages is not None else self._prepare_messages_for_api(think_mode)
         tools_schema = self.tool_registry.get_schemas()
         model = self.model_id
 

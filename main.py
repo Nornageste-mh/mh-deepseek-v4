@@ -15,6 +15,7 @@ import web
 GREEN  = "\033[32m"
 BLUE   = "\033[34m"
 BOLD   = "\033[1m"
+RED    = "\033[31m"
 RESET  = "\033[0m"
 
 if IS_WINDOWS:
